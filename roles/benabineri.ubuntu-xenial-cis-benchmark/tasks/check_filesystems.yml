@@ -1,0 +1,39 @@
+- name: check cramfs
+  shell: modprobe -n -v cramfs
+  register: cramfs_status
+  changed_when: false
+
+- name: check freevxfs
+  shell: modprobe -n -v freevxfs
+  register: freevxfs_status
+  changed_when: false
+
+- name: check jffs2
+  shell: modprobe -n -v jffs2
+  register: jffs2_status
+  changed_when: false
+
+- name: check hfs
+  shell: modprobe -n -v hfs
+  register: hfs_status
+  changed_when: false
+
+- name: check hfsplus
+  shell: modprobe -n -v hfsplus
+  register: hfsplus_status
+  changed_when: false
+
+- name: check squashfs
+  shell: modprobe -n -v squashfs
+  register: squashfs_status
+  changed_when: false
+
+- name: check udf
+  shell: modprobe -n -v udf
+  register: udf_status
+  changed_when: false
+
+- name: check vfat
+  shell: modprobe -n -v vfat
+  register: vfat_status
+  changed_when: false

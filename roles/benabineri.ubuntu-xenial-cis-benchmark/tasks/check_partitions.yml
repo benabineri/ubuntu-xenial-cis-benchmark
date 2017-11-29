@@ -1,0 +1,60 @@
+- name: check for /var
+  shell: findmnt --target /var | tail -1 | awk '{print $1}'
+  register: var_partition
+  changed_when: false
+
+- name: check for /tmp
+  shell: findmnt --target /tmp | tail -1 | awk '{print $1}'
+  register: tmp_partition
+  changed_when: false
+
+- name: check /tmp options
+  shell: findmnt --target /tmp | tail -1 | awk '{print $4}' | tr , "\n"
+  register: tmp_options
+  changed_when: false
+
+- name: check for /var/tmp
+  shell: findmnt --target /var/tmp | tail -1 | awk '{print $1}'
+  register: vartmp_partition
+  changed_when: false
+
+- name: check /var/tmp options
+  shell: findmnt --target /var/tmp | tail -1 | awk '{print $4}' | tr , "\n" 
+  register: vartmp_options
+  changed_when: false
+
+- name: check for /var/log
+  shell: findmnt --target /var/log | tail -1 | awk '{print $1}'
+  register: varlog_partition
+  changed_when: false
+
+- name: check for /var/log/audit
+  shell: findmnt --target /var/log/audit | tail -1 | awk '{print $1}'
+  register: varlogaudit_partition
+  changed_when: false
+
+- name: check for /home
+  shell: findmnt --target /home | tail -1 | awk '{print $1}'
+  register: home_partition
+  changed_when: false
+
+- name: check /home options
+  shell: findmnt --target /home | tail -1 | awk '{print $4}' | tr , "\n" 
+  register: home_options
+  changed_when: false
+
+- name: check /dev/shm options
+  shell: findmnt --target /dev/shm | tail -1 | awk '{print $4}' | tr , "\n"
+  register: devshm_options
+  changed_when: false
+
+- name: check world-writeable sticky bit directories
+  shell: df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type d \( -perm -0002 -a ! -perm -1000 \) 2>/dev/null
+  register: ww_nostickybit_dirs
+  changed_when: false
+
+- name: check autofs status
+  shell: systemctl is-enabled autofs
+  register: autofs_status
+  changed_when: false
+  failed_when: autofs_status.rc >= 2

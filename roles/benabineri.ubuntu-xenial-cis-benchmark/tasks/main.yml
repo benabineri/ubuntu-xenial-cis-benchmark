@@ -1,0 +1,39 @@
+---
+- name: blacklist filesystems
+  copy:
+    src: cis-blacklist-filesystems.conf
+    dest: /etc/modprobe.d/
+    owner: root
+    group: root
+    mode: 0644
+  register: reboot
+
+- include: check_filesystems.yml
+
+- include: change_partitions.yml
+  when: change_partitions is defined
+
+- include: check_partitions.yml
+
+- name: reboot
+  become: true
+  shell: sleep 2 && /sbin/shutdown -r now "System reboot"
+  async: 1
+  poll: 0
+  when: reboot.changed
+
+- name: wait for connection
+  wait_for_connection:
+    delay: 10
+  when: reboot.changed
+
+- name: output report
+  template:
+    src: report.j2
+    dest: /tmp/report_out.txt
+
+- name: fetch report
+  fetch:
+    src: /tmp/report_out.txt
+    dest: reports/{{ ansible_hostname }}/
+    flat: yes

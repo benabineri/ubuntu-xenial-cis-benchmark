@@ -1,0 +1,186 @@
+1.1.1 Disable unused filesystems
+1.1.1.1 Ensure mounting of cramfs filesystems is disabled
+{% if cramfs_status.stdout == "install /bin/true " %}
+Pass
+{% else %}
+Fail
+{% endif %}
+
+1.1.1.2 Ensure mounting of freevxfs filesystems is disabled
+{% if freevxfs_status.stdout == "install /bin/true " %}
+Pass
+{% else %}
+Fail
+{% endif %}
+
+1.1.1.3 Ensure mounting of jffs2 filesystems is disabled
+{% if jffs2_status.stdout == "install /bin/true " %}
+Pass
+{% else %}
+Fail
+{% endif %}
+
+1.1.1.4 Ensure mounting of hfs filesystems is disabled
+{% if hfs_status.stdout == "install /bin/true " %}
+Pass
+{% else %}
+Fail
+{% endif %}
+
+1.1.1.5 Ensure mounting of hfsplus filesystems is disabled
+{% if hfsplus_status.stdout == "install /bin/true " %}
+Pass
+{% else %}
+Fail
+{% endif %}
+
+1.1.1.6 Ensure mounting of squashfs filesystems is disabled
+{% if squashfs_status.stdout == "install /bin/true " %}
+Pass
+{% else %}
+Fail
+{% endif %}
+
+1.1.1.7 Ensure mounting of udf filesystems is disabled
+{% if udf_status.stdout == "install /bin/true " %}
+Pass
+{% else %}
+Fail
+{% endif %}
+
+1.1.1.8 Ensure mounting of FAT filesystems is disabled
+{% if vfat_status.stdout == "install /bin/true " %}
+Pass
+{% else %}
+Fail
+{% endif %}
+
+1.1.2 Ensure separate partition exists for /tmp
+{% if tmp_partition.stdout == "/tmp"  %}
+Pass
+{% else %}
+Fail:
+/tmp mounted on {{ tmp_partition.stdout }}
+{% endif %}
+
+1.1.3 Ensure nodev option set on /tmp partition
+{% if "nodev" in tmp_options.stdout_lines %}
+Pass
+{% else %}
+Fail
+{% endif %}
+
+1.1.4 Ensure nosuid option set on /tmp partition
+{% if "nosuid" in tmp_options.stdout_lines %}
+Pass
+{% else %}
+Fail
+{% endif %}
+
+1.1.5 Ensure separate partition exists for /var
+{% if var_partition.stdout == "/var"  %}
+Pass
+{% else %}
+Fail:
+/var mounted on {{ var_partition.stdout }}
+{% endif %}
+
+1.1.6 Ensure separate partition exists for /var/tmp
+{% if vartmp_partition.stdout == "/var/tmp"  %}
+Pass
+{% else %}
+Fail:
+/var/tmp mounted on {{ vartmp_partition.stdout }}
+{% endif %}
+
+1.1.7 Ensure nodev option set on /var/tmp partition
+{% if "nodev" in vartmp_options.stdout_lines %}
+Pass
+{% else %}
+Fail
+{% endif %}
+
+1.1.8 Ensure nosuid option set on /var/tmp partition
+{% if "nosuid" in vartmp_options.stdout_lines %}
+Pass
+{% else %}
+Fail
+{% endif %}
+
+1.1.9 Ensure noexec option set on /var/tmp partition
+{% if "noexec" in vartmp_options.stdout_lines %}
+Pass
+{% else %}
+Fail
+{% endif %}
+
+1.1.10 Ensure separate partition exists for /var/log
+{% if varlog_partition.stdout == "/var/log"  %}
+Pass
+{% else %}
+Fail:
+/var/log mounted on {{ varlog_partition.stdout }}
+{% endif %}
+
+/var/log/audit is mounted on a separate partition:
+{% if varlogaudit_partition.stdout == "/var/log/audit"  %}
+Pass
+{% else %}
+Fail:
+/var/log/audit mounted on {{ varlogaudit_partition.stdout }}
+{% endif %}
+
+/home is mounted on a separate partition:
+{% if home_partition.stdout == "/home"  %}
+Pass
+{% else %}
+Fail:
+/home mounted on {{ home_partition.stdout }}
+{% endif %}
+
+/home options:
+{% if home_options.stdout == "data=ordered,nodev,relatime,rw" %}
+Pass
+{% else %}
+Fail:
+{{ home_options.stdout }}, expecting data=ordered,nodev,relatime,rw
+{% endif %}
+
+/dev/shm options contains nodev
+{% if "nodev" in devshm_options.stdout_lines %}
+Pass
+{% else %}
+Fail
+{% endif %}
+
+/dev/shm options contains nosuid
+{% if "nosuid" in devshm_options.stdout_lines %}
+Pass
+{% else %}
+Fail
+{% endif %}
+
+/dev/shm options contains noexec
+{% if "noexec" in devshm_options.stdout_lines %}
+Pass
+{% else %}
+Fail
+{% endif %}
+
+1.1.20 Ensure sticky bit is set on all world-writable directories
+{% if ww_nostickybit_dirs.stdout == "" %}
+Pass
+{% else %}
+Fail:
+{{ ww_nostickybit_dirs.stdout }}
+{% endif %}
+
+1.1.21 Disable Automounting
+{% if autofs_status != "enabled" %}
+Pass
+{% else %}
+Fail
+{% endif %}
+
+
+

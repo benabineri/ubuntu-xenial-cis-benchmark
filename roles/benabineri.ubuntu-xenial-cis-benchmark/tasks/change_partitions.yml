@@ -1,0 +1,14 @@
+- name: install tmp.mount
+  copy:
+    src: tmp.mount
+    dest: /etc/systemd/system/
+    owner: root
+    group: root
+    mode: 0755
+  
+- name: enable tmp.mount
+  systemd:
+    service: tmp.mount
+    enabled: yes
+    state: started
+    daemon_reload: yes
